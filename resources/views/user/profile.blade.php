@@ -31,8 +31,8 @@
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ** Logo Start ** -->
-                    <a href="/" class="logo">
-                        <img src="assets/images/logo.png">
+                    <a href="{{ route('landing') }}" class="logo">
+                        <img src="assets/images/Logo.jpeg" style="width: 80px; heigh: 80px">
                     </a>
                     <!-- ** Logo End ** -->
                     <!-- ** Menu Start ** -->
