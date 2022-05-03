@@ -29,6 +29,16 @@ class Admin extends Authenticatable
         'phone',
     ];
 
+    public function response()
+    {
+        return $this->hasMany(Response::class, "admin_id");
+    }
+
+    public function admin_notification()
+    {
+        return $this->hasMany(Admin_notification::class, "notifiable_id");
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
