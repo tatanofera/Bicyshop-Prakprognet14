@@ -19,6 +19,12 @@
     <link rel="stylesheet" href="assets/css/owl-carousel.css">
 
     <link rel="stylesheet" href="assets/css/lightbox.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
     <title>{{ $title }}</title>
 
 </head>
@@ -148,7 +154,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="section-heading">
-                        <h2>Men's Latest</h2>
+                        <h2>Sepeda Gunung</h2>
                         <span>Details to details is what makes Hexashop different from the other themes.</span>
                     </div>
                 </div>
@@ -159,6 +165,11 @@
                 <div class="col-lg-12">
                     <div class="men-item-carousel">
                         <div class="owl-men-item owl-carousel">
+                            @foreach($products as $product)
+                            <?php
+                            $product_category_bmxs = App\Models\Product_category_details::where('product_id', '=', $product->id)->where('category_id', '=', '19')->get();
+                            ?>
+                            @foreach($product_category_bmxs as $product_category_bmx)
                             <div class="item">
                                 <div class="thumb">
                                     <div class="hover-content">
@@ -168,11 +179,66 @@
                                             <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a></li>
                                         </ul>
                                     </div>
-                                    <img src="assets/images/men-01.jpg" alt="">
+                                    <?php
+                                    // $tmps = App\Models\Product_image::where('product_id', '=', $product->id)->get();
+                                    $tmps = App\Models\Product_image::where('product_id', '=', $product_category_bmx->product_id)->get();
+                                    $count_product_images = $tmps->count();
+                                    ?>
+                                    @if(!empty($count_product_images))
+                                    <div id="mycarousel" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-indicators">
+                                            <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                            @foreach($tmps as $key => $slider)
+                                            @if($key >0)
+                                            <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="{{$key}}" aria-label="Slide {{$key}}"></button>
+                                            @endif
+                                            @endforeach
+                                        </div>
+                                        <div class="carousel-inner">
+                                            @foreach($tmps as $key => $slider)
+                                            <div class="carousel-item {{$key == 0 ? 'active' : '' }}">
+                                                <img src="{{ asset('storage/'.$slider->image_name) }}" class="d-block w-100" style="width: 400px; height: 400px;" alt="...">
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        <!-- <button class="carousel-control-prev" type="button" data-bs-target="#mycarousel" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#mycarousel" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button> -->
+                                    </div>
+                                    @else
+                                    <div class="thumbnail text-center">
+                                        <img src="../assets_admin/img/no_image.png" class="d-block w-100" alt="..." style="width: 400px; height: 400px;">
+                                    </div>
+                                    @endif
                                 </div>
                                 <div class="down-content">
-                                    <h4>Classic Spring</h4>
-                                    <span>$120.00</span>
+                                    <h6>{{ $product_category_bmx->Product->product_name }}</h6>
+                                    <?php
+                                    $discounts = App\Models\Discount::where('product_id', '=', $product->id)->get();
+                                    $discount_count = $discounts->count();
+
+                                    $harga_sblm_diskon = array();
+                                    foreach ($discounts as $kunci => $discount) {
+                                        $harga_stlh_diskon = $product->price;
+                                        $old_diskon = $discount->percentage;
+                                        $harga_sblm_diskon[$kunci] = $harga_stlh_diskon * (100 / (100 - $old_diskon));
+                                    }
+                                    ?>
+                                    @if(!empty($discount_count))
+                                    <span>Rp.{{ $product->price }}</span>
+                                    <div class="form-inline mt-3">
+                                        <button class="btn btn-danger">{{ $old_diskon }}% OFF</button>
+                                        <span class="ms-2"><del> Rp.{{ $harga_sblm_diskon[0] }} </del></span>
+                                    </div>
+                                    @else
+                                    <span>Rp.{{ $product->price }}</span>
+                                    <button class="btn btn-danger mt-3">0% OFF</button>
+                                    @endif
                                     <ul class="stars">
                                         <li><i class="fa fa-star"></i></li>
                                         <li><i class="fa fa-star"></i></li>
@@ -182,7 +248,9 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item">
+                            @endforeach
+                            @endforeach
+                            <!-- <div class="item">
                                 <div class="thumb">
                                     <div class="hover-content">
                                         <ul>
@@ -250,7 +318,7 @@
                                         <li><i class="fa fa-star"></i></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -265,7 +333,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="section-heading">
-                        <h2>Women's Latest</h2>
+                        <h2>Sepeda Lipat</h2>
                         <span>Details to details is what makes Hexashop different from the other themes.</span>
                     </div>
                 </div>
@@ -276,6 +344,11 @@
                 <div class="col-lg-12">
                     <div class="women-item-carousel">
                         <div class="owl-women-item owl-carousel">
+                            @foreach($products as $product)
+                            <?php
+                            $product_category_bmxs = App\Models\Product_category_details::where('product_id', '=', $product->id)->where('category_id', '=', '13')->get();
+                            ?>
+                            @foreach($product_category_bmxs as $product_category_bmx)
                             <div class="item">
                                 <div class="thumb">
                                     <div class="hover-content">
@@ -285,11 +358,66 @@
                                             <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a></li>
                                         </ul>
                                     </div>
-                                    <img src="assets/images/women-01.jpg" alt="">
+                                    <?php
+                                    // $tmps = App\Models\Product_image::where('product_id', '=', $product->id)->get();
+                                    $tmps = App\Models\Product_image::where('product_id', '=', $product_category_bmx->product_id)->get();
+                                    $count_product_images = $tmps->count();
+                                    ?>
+                                    @if(!empty($count_product_images))
+                                    <div id="mycarousel" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-indicators">
+                                            <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                            @foreach($tmps as $key => $slider)
+                                            @if($key >0)
+                                            <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="{{$key}}" aria-label="Slide {{$key}}"></button>
+                                            @endif
+                                            @endforeach
+                                        </div>
+                                        <div class="carousel-inner">
+                                            @foreach($tmps as $key => $slider)
+                                            <div class="carousel-item {{$key == 0 ? 'active' : '' }}">
+                                                <img src="{{ asset('storage/'.$slider->image_name) }}" class="d-block w-100" style="width: 400px; height: 400px;" alt="...">
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        <!-- <button class="carousel-control-prev" type="button" data-bs-target="#mycarousel" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#mycarousel" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button> -->
+                                    </div>
+                                    @else
+                                    <div class="thumbnail text-center">
+                                        <img src="../assets_admin/img/no_image.png" class="d-block w-100" alt="..." style="width: 400px; height: 400px;">
+                                    </div>
+                                    @endif
                                 </div>
                                 <div class="down-content">
-                                    <h4>New Green Jacket</h4>
-                                    <span>$75.00</span>
+                                    <h6>{{ $product_category_bmx->Product->product_name }}</h6>
+                                    <?php
+                                    $discounts = App\Models\Discount::where('product_id', '=', $product->id)->get();
+                                    $discount_count = $discounts->count();
+
+                                    $harga_sblm_diskon = array();
+                                    foreach ($discounts as $kunci => $discount) {
+                                        $harga_stlh_diskon = $product->price;
+                                        $old_diskon = $discount->percentage;
+                                        $harga_sblm_diskon[$kunci] = $harga_stlh_diskon * (100 / (100 - $old_diskon));
+                                    }
+                                    ?>
+                                    @if(!empty($discount_count))
+                                    <span>Rp.{{ $product->price }}</span>
+                                    <div class="form-inline mt-3">
+                                        <button class="btn btn-danger">{{ $old_diskon }}% OFF</button>
+                                        <span class="ms-2"><del> Rp.{{ $harga_sblm_diskon[0] }} </del></span>
+                                    </div>
+                                    @else
+                                    <span>Rp.{{ $product->price }}</span>
+                                    <button class="btn btn-danger mt-3">0% OFF</button>
+                                    @endif
                                     <ul class="stars">
                                         <li><i class="fa fa-star"></i></li>
                                         <li><i class="fa fa-star"></i></li>
@@ -299,7 +427,9 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item">
+                            @endforeach
+                            @endforeach
+                            <!-- <div class="item">
                                 <div class="thumb">
                                     <div class="hover-content">
                                         <ul>
@@ -367,7 +497,7 @@
                                         <li><i class="fa fa-star"></i></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -393,6 +523,11 @@
                 <div class="col-lg-12">
                     <div class="kid-item-carousel">
                         <div class="owl-kid-item owl-carousel">
+                            @foreach($products as $product)
+                            <?php
+                            $product_category_bmxs = App\Models\Product_category_details::where('product_id', '=', $product->id)->where('category_id', '=', '19')->get();
+                            ?>
+                            @foreach($product_category_bmxs as $product_category_bmx)
                             <div class="item">
                                 <div class="thumb">
                                     <div class="hover-content">
@@ -402,11 +537,66 @@
                                             <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a></li>
                                         </ul>
                                     </div>
-                                    <img src="assets/images/kid-01.jpg" alt="">
+                                    <?php
+                                    // $tmps = App\Models\Product_image::where('product_id', '=', $product->id)->get();
+                                    $tmps = App\Models\Product_image::where('product_id', '=', $product_category_bmx->product_id)->get();
+                                    $count_product_images = $tmps->count();
+                                    ?>
+                                    @if(!empty($count_product_images))
+                                    <div id="mycarousel" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-indicators">
+                                            <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                            @foreach($tmps as $key => $slider)
+                                            @if($key >0)
+                                            <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="{{$key}}" aria-label="Slide {{$key}}"></button>
+                                            @endif
+                                            @endforeach
+                                        </div>
+                                        <div class="carousel-inner">
+                                            @foreach($tmps as $key => $slider)
+                                            <div class="carousel-item {{$key == 0 ? 'active' : '' }}">
+                                                <img src="{{ asset('storage/'.$slider->image_name) }}" class="d-block w-100" style="width: 400px; height: 400px;" alt="...">
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        <!-- <button class="carousel-control-prev" type="button" data-bs-target="#mycarousel" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#mycarousel" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button> -->
+                                    </div>
+                                    @else
+                                    <div class="thumbnail text-center">
+                                        <img src="../assets_admin/img/no_image.png" class="d-block w-100" alt="..." style="width: 400px; height: 400px;">
+                                    </div>
+                                    @endif
                                 </div>
                                 <div class="down-content">
-                                    <h4>School Collection</h4>
-                                    <span>$80.00</span>
+                                    <h6>{{ $product_category_bmx->Product->product_name }}</h6>
+                                    <?php
+                                    $discounts = App\Models\Discount::where('product_id', '=', $product->id)->get();
+                                    $discount_count = $discounts->count();
+
+                                    $harga_sblm_diskon = array();
+                                    foreach ($discounts as $kunci => $discount) {
+                                        $harga_stlh_diskon = $product->price;
+                                        $old_diskon = $discount->percentage;
+                                        $harga_sblm_diskon[$kunci] = $harga_stlh_diskon * (100 / (100 - $old_diskon));
+                                    }
+                                    ?>
+                                    @if(!empty($discount_count))
+                                    <span>Rp.{{ $product->price }}</span>
+                                    <div class="form-inline mt-3">
+                                        <button class="btn btn-danger">{{ $old_diskon }}% OFF</button>
+                                        <span class="ms-2"><del> Rp.{{ $harga_sblm_diskon[0] }} </del></span>
+                                    </div>
+                                    @else
+                                    <span>Rp.{{ $product->price }}</span>
+                                    <button class="btn btn-danger mt-3">0% OFF</button>
+                                    @endif
                                     <ul class="stars">
                                         <li><i class="fa fa-star"></i></li>
                                         <li><i class="fa fa-star"></i></li>
@@ -416,7 +606,9 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="item">
+                            @endforeach
+                            @endforeach
+                            <!-- <div class="item">
                                 <div class="thumb">
                                     <div class="hover-content">
                                         <ul>
@@ -484,7 +676,7 @@
                                         <li><i class="fa fa-star"></i></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

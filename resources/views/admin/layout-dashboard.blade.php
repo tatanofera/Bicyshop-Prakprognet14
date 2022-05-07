@@ -56,7 +56,8 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="../assets_admin/css/soft-ui-dashboard.min.css?v=1.0.3" rel="stylesheet" />
     <!-- CSS Icon -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" /> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <!-- Javascript -->
     <!-- <link href="../assets_admin/js/soft-ui-dashboard.js" rel="stylesheet" /> -->
 
@@ -71,7 +72,7 @@
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-            <a class="navbar-brand m-0" href="/" target="">
+            <a class="navbar-brand m-0" href="{{route('dashboard')}}" target="">
                 <img src="../assets_admin/img/shop2.png" class="navbar-brand-img h-100" alt="main_logo">
                 <span class="ms-1 font-weight-bold">BicyShop</span>
             </a>
@@ -316,13 +317,7 @@
                             <input type="text" class="form-control" placeholder="Type here...">
                         </div>
                     </div>
-                    <ul class="navbar-nav  justify-content-end">
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
-                                <i class="fa fa-user me-sm-1"></i>
-                                <span class="d-sm-inline d-none">Anonim</span>
-                            </a>
-                        </li>
+                    <ul class="navbar-nav dropdown justify-content-end">
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
                                 <div class="sidenav-toggler-inner">
@@ -332,12 +327,20 @@
                                 </div>
                             </a>
                         </li>
-                        <li class="nav-item px-3 d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-body p-0">
-                                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <span class="d-sm-inline d-none">{{Auth::guard('admin')->user()->admin_name}}</span>
                             </a>
+                            <ul class="dropdown-menu m-0 mt-2 p-0 pt-2" aria-labelledby="navbarDropdownMenuLink2">
+                                <li class="text-center m-0 p-0">
+                                    <a type="button" class="btn btn-danger" href="{{ route('logoutadmin') }}">
+                                        <span> Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                        <li class="nav-item dropdown ps-3 pe-2 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-bell cursor-pointer"></i>
                             </a>
@@ -380,35 +383,40 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item px-3 d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body p-0">
+                                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <!-- <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-                                        <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                                            <div class="input-group">
-                                                <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                                                <input type="text" class="form-control" placeholder="Type here...">
-                                            </div>
-                                        </div>
-                                        <ul class="navbar-nav  justify-content-end">
-                                            <li class="nav-item d-flex align-items-center">
-                                                <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
-                                                    <i class="fa fa-user me-sm-1"></i>
-                                                    <span class="d-sm-inline d-none">BicyShop</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-                                                <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
-                                                    <div class="sidenav-toggler-inner">
-                                                        <i class="sidenav-toggler-line"></i>
-                                                        <i class="sidenav-toggler-line"></i>
-                                                        <i class="sidenav-toggler-line"></i>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item dropdown pe-2 d-flex align-items-center">
-                                            </li>
-                                        </ul>
-                                    </div> -->
+                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                        <div class="input-group">
+                            <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" placeholder="Type here...">
+                        </div>
+                    </div>
+                    <ul class="navbar-nav  justify-content-end">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <span class="d-sm-inline d-none">BicyShop</span>
+                            </a>
+                        </li>
+                        <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                                <div class="sidenav-toggler-inner">
+                                    <i class="sidenav-toggler-line"></i>
+                                    <i class="sidenav-toggler-line"></i>
+                                    <i class="sidenav-toggler-line"></i>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                        </li>
+                    </ul>
+                </div> -->
 
             </div>
         </nav>
@@ -417,7 +425,7 @@
             @yield('body')
         </div>
 
-        <footer class="footer pt-3  ">
+        <footer class="footer pt-0  ">
             <div class="container-fluid">
                 <div class="row align-items-center justify-content-lg-between">
                     <div class="col-lg-6 mb-lg-0 mb-4">

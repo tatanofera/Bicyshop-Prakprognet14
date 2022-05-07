@@ -118,6 +118,7 @@ class DiscountController extends Controller
     {
         $page = "Discount / Trash";
         $discounts = Discount::onlyTrashed()->get();
+        // $product = Product::onlyTrashed()->where('id', '=', $discounts->product_id)->first();
 
         return view('admin.discount.discount-trash', compact('discounts', 'page'))->with('discount_active', 'active');
     }

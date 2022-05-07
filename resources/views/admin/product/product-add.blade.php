@@ -49,12 +49,50 @@
                     </select>
                     @error('category_name')
                     <div class="alert alert-danger invalid-feedback" role="alert">
-                        <!-- <span class="alert-icon"><i class="ni ni-like-2"></i></span> -->
                         <strong>{{ $message }}</strong>
                     </div>
                     @enderror
                 </div>
-                <div class="form-group mb-3">
+                <div class="row">
+                    <div class="col form-group mb-3">
+                        <label for="price">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control @error('price') is-invalid @enderror" aria-label="Amount (to the nearest dollar)" min="0" id="price" placeholder="Masukkan harga jual produk" name="price" value="{{old('price')}}">
+                            <span class="input-group-text">.00</span>
+                            @error('price')
+                            <div class="alert alert-danger invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col form-group mb-3">
+                        <label for="stock" class="form-control-label">Stock</label>
+                        <div class="input-group">
+                            <input class="form-control @error('stock') is-invalid @enderror" type="number" min="0" id="stock" name="stock" value="{{old('stock')}}" placeholder="Masukkan stok produk">
+                            <span class="input-group-text">pcs</span>
+                            @error('stock')
+                            <div class="alert alert-danger invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col form-group mb-3">
+                        <label for="weight" class="form-control-label">Weight</label>
+                        <div class="input-group">
+                            <input class="form-control @error('weight') is-invalid @enderror" type="number" min="0" id="weight" name="weight" value="{{old('weight')}}" placeholder="Masukkan berat produk">
+                            <span class="input-group-text">kg</span>
+                            @error('weight')
+                            <div class="alert alert-danger invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="form-group mb-3">
                     <label for="price">Price</label>
                     <div class="input-group">
                         <span class="input-group-text">Rp</span>
@@ -62,7 +100,6 @@
                         <span class="input-group-text">.00</span>
                         @error('price')
                         <div class="alert alert-danger invalid-feedback" role="alert">
-                            <!-- <span class="alert-icon"><i class="ni ni-like-2"></i></span> -->
                             <strong>{{ $message }}</strong>
                         </div>
                         @enderror
@@ -75,7 +112,6 @@
                         <span class="input-group-text">pcs</span>
                         @error('stock')
                         <div class="alert alert-danger invalid-feedback" role="alert">
-                            <!-- <span class="alert-icon"><i class="ni ni-like-2"></i></span> -->
                             <strong>{{ $message }}</strong>
                         </div>
                         @enderror
@@ -88,18 +124,16 @@
                         <span class="input-group-text">kg</span>
                         @error('weight')
                         <div class="alert alert-danger invalid-feedback" role="alert">
-                            <!-- <span class="alert-icon"><i class="ni ni-like-2"></i></span> -->
                             <strong>{{ $message }}</strong>
                         </div>
                         @enderror
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group mb-3 mt-3">
                     <label for="description">Description</label>
                     <textarea type="text" class="form-control @error('description') is-invalid @enderror" value="{{old('description')}}" placeholder="Masukkan deskripsi produk" id="description" name="description" rows="3"></textarea>
                     @error('description')
                     <div class="alert alert-danger invalid-feedback" role="alert">
-                        <!-- <span class="alert-icon"><i class="ni ni-like-2"></i></span> -->
                         <strong>{{ $message }}</strong>
                     </div>
                     @enderror

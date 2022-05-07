@@ -17,6 +17,7 @@
     <div class="container mb-2 mt-4">
         <div class="row p-5 ps-3 pt-0 pb-0 mb-0">
             <div class="col-4 mt-4">
+                @if(!empty($count_product_images))
                 <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -51,6 +52,11 @@
                         <span class="sr-only">Next</span>
                     </a> -->
                 </div>
+                @else
+                <div class="thumbnail text-center">
+                    <img class="img-fluid shadow border-radius-lg" src="../assets_admin/img/no_image.png" alt="..." style="width: 300px; height: 300px;">
+                </div>
+                @endif
                 <!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -71,7 +77,7 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div> -->
-                <h6 class="text-center bold">Image Product : {{$products->product_name}}</h6>
+                <p class="text-center bold"><strong>Image Product : {{$products->product_name}}</strong></p>
                 <!-- @forelse($product_images as $product_image)
                 <div class="row">
                     <form action="{{ route('product-image-delete', $product_image->id)  }}" method="POST">
@@ -99,12 +105,12 @@
                 <div class="row">
                     <div class="">
                         <label for="price" class="form-control-label">Price</label>
-                        <input class="form-control" type="number" value="{{$products->price}}" id="price" name="price" readonly>
+                        <input class="form-control" type="text" value="Rp.{{$products->price}}" id="price" name="price" readonly>
                     </div>
                 </div>
                 <div class="col">
                     <label for="description" class="form-control-label">Description</label>
-                    <input class="form-control" type="text" value="{{$products->description}}" rows="3" id="description" name="description" readonly>
+                    <textarea class="form-control" type="text" value="{{$products->description}}" rows="3" id="description" name="description" readonly>{{$products->description}}</textarea>
                 </div>
                 <div class="col">
                     <label for="stock" class="form-control-label">Stock</label>

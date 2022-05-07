@@ -12,6 +12,7 @@ use App\Models\Product_category_details;
 use App\Models\Product_image;
 use Illuminate\Pagination\Paginator;
 
+
 class ProductController extends Controller
 {
     public function product_add()
@@ -151,6 +152,7 @@ class ProductController extends Controller
         $page = "Product / Detail";
         $products = Product::find($id);
         $product_images = Product_image::where('product_id', '=', $products->id)->get();
+        $count_product_images = $product_images->count();
         $det_categories = Product_category_details::where('product_id', '=', $products->id)->first();
         $categories = Product_categories::all();
 
@@ -159,11 +161,11 @@ class ProductController extends Controller
         Paginator::useBootstrap();
 
         if ($discount == null) {
-            return view('admin.product.product-detail', compact('products', 'product_images', 'det_categories', 'categories', 'discount', 'page'))->with('discount', 'active')->with('product_active', 'active');
+            return view('admin.product.product-detail', compact('products', 'product_images', 'count_product_images', 'det_categories', 'categories', 'discount', 'page'))->with('discount', 'active')->with('product_active', 'active');
             // return view('admin.product.product-edit', compact('products', 'product_images', 'categories', 'det_categories', 'discount'))->with('discount', 'active');
         } else {
             $discounts = Discount::where('product_id', '=', $products->id)->paginate(5);
-            return view('admin.product.product-detail', compact('products', 'product_images', 'det_categories', 'categories', 'discounts', 'page'))->with('product_active', 'active');
+            return view('admin.product.product-detail', compact('products', 'product_images', 'count_product_images', 'det_categories', 'categories', 'discounts', 'page'))->with('product_active', 'active');
             // return view('admin.product.product-edit', compact('products', 'product_images', 'categories', 'det_categories', 'discounts'));
         }
     }
@@ -282,6 +284,7 @@ class ProductController extends Controller
         return redirect()->route('product-edit', $product->id)->with(['success' => 'Perubahan data berhasil dilakukan']);
     }
 
+
     // public function product_edit_submit(Request $request, $id)
     // {
     //     $product = Product::find($id);
@@ -329,12 +332,13 @@ class ProductController extends Controller
     //     return redirect()->route('product-edit', $product->id)->with(['success' => 'Perubahan data berhasil dilakukan']);
     // }
 
-    public function product_image_delete($id)
+    public function product_image_delete(Request $request, $id)
     {
         $product_images = Product_image::find($id);
         $product = Product::where('id', '=', $product_images->product_id)->first();
         $product_images->delete();
-        return redirect()->route('product-edit', $product->id)->with('product_active', 'active');
+        Product_image::onlyTrashed()->where('id', $id)->forceDelete();
+        return redirect()->route('product-edit', $product->id)->with('product_active', 'active')->with(['success' => 'Gambar berhasil dihapus']);
     }
 
     public function product_delete($id)
@@ -342,9 +346,22 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product_images = Product_image::where('product_id', '=', $product->id);
         $product_category_detail = Product_category_details::where('product_id', '=', $product->id);
+        $discount = Discount::where('product_id', '=', $product->id);
 
         if ($product_images->count() > 0) {
+            if ($discount->count() > 0) {
+                $discount->delete();
+                $product_images->delete();
+                $product_category_detail->delete();
+                $product->delete();
+                return back()->with('product_active', 'active')->with(['success' => 'Data berhasil dihapus']);
+            }
             $product_images->delete();
+            $product_category_detail->delete();
+            $product->delete();
+            return back()->with('product_active', 'active')->with(['success' => 'Data berhasil dihapus']);
+        } else if ($discount->count() > 0) {
+            $discount->delete();
             $product_category_detail->delete();
             $product->delete();
             return back()->with('product_active', 'active')->with(['success' => 'Data berhasil dihapus']);
@@ -372,9 +389,23 @@ class ProductController extends Controller
     {
         $products = Product::onlyTrashed()->where('id', '=', $id)->first();
         $product_images_cek = Product_image::onlyTrashed()->where('product_id', '=', $products->id)->count();
+        $product_discount_cek = Discount::onlyTrashed()->where('product_id', '=', $products->id)->count();
+        // $product_images_cek = Product_image::onlyTrashed()->where('product_id', '=', $products->id)->count();
 
         if ($product_images_cek > 0) {
+            if ($product_discount_cek > 0) {
+                Discount::onlyTrashed()->where('product_id', '=', $products->id)->restore();
+                Product_image::onlyTrashed()->where('product_id', '=', $products->id)->restore();
+                Product_category_details::onlyTrashed()->where('product_id', '=', $products->id)->restore();
+                Product::onlyTrashed()->where('id', $id)->restore();
+                return back()->with(['success' => 'Data berhasil dikembalikan']);
+            }
             Product_image::onlyTrashed()->where('product_id', '=', $products->id)->restore();
+            Product_category_details::onlyTrashed()->where('product_id', '=', $products->id)->restore();
+            Product::onlyTrashed()->where('id', $id)->restore();
+            return back()->with(['success' => 'Data berhasil dikembalikan']);
+        } else if ($product_discount_cek > 0) {
+            Discount::onlyTrashed()->where('product_id', '=', $products->id)->restore();
             Product_category_details::onlyTrashed()->where('product_id', '=', $products->id)->restore();
             Product::onlyTrashed()->where('id', $id)->restore();
             return back()->with(['success' => 'Data berhasil dikembalikan']);
@@ -390,9 +421,22 @@ class ProductController extends Controller
     {
         $products = Product::onlyTrashed()->where('id', '=', $id)->first();
         $product_images_cek = Product_image::onlyTrashed()->where('product_id', '=', $products->id)->count();
+        $product_discount_cek = Discount::onlyTrashed()->where('product_id', '=', $products->id)->count();
 
         if ($product_images_cek > 0) {
+            if ($product_discount_cek > 0) {
+                Discount::onlyTrashed()->where('product_id', '=', $products->id)->forceDelete();
+                Product_image::onlyTrashed()->where('product_id', '=', $products->id)->forceDelete();
+                Product_category_details::onlyTrashed()->where('product_id', '=', $products->id)->forceDelete();
+                Product::onlyTrashed()->where('id', $id)->forceDelete();
+                return back()->with(['success' => 'Data berhasil dihapus permanent']);
+            }
             Product_image::onlyTrashed()->where('product_id', '=', $products->id)->forceDelete();
+            Product_category_details::onlyTrashed()->where('product_id', '=', $products->id)->forceDelete();
+            Product::onlyTrashed()->where('id', $id)->forceDelete();
+            return back()->with(['success' => 'Data berhasil dihapus permanent']);
+        } else if ($product_discount_cek > 0) {
+            Discount::onlyTrashed()->where('product_id', '=', $products->id)->forceDelete();
             Product_category_details::onlyTrashed()->where('product_id', '=', $products->id)->forceDelete();
             Product::onlyTrashed()->where('id', $id)->forceDelete();
             return back()->with(['success' => 'Data berhasil dihapus permanent']);

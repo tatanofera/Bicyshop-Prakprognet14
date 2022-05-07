@@ -35,6 +35,11 @@
             </thead>
             <tbody>
                 @foreach($discounts as $discount)
+                <?php
+                $products = App\Models\Product::onlyTrashed()->where('id', '=', $discount->product_id)->get();
+                $product = App\Models\Product::onlyTrashed()->where('id', '=', $discount->product_id)->first();
+                $product_count = $products->count();
+                ?>
                 <tr class="text-center">
                     <td>
                         <div>
@@ -49,20 +54,40 @@
                     <td>
                         <span class="text-dark text-xs">{{ $discount->end }}</span>
                     </td>
+                    @if(!empty($product_count))
+                    <td>
+                        <span class="text-xs font-weight-bold mb-0">{{ $product->product_name }}</span>
+                    </td>
+                    @else
                     <td>
                         <span class="text-xs font-weight-bold mb-0">{{ $discount->Product->product_name }}</span>
                     </td>
+                    @endif
                     <td>
                         <span class="text-dark text-xs">{{ $discount->percentage }}%</span>
                     </td>
                     <td class="align-middle">
                         <form action="{{ route('discount-delete-permanently', $discount->id)  }}" method="POST">
                             @csrf
+                            @if(empty($product_count))
                             <a type="button" class="btn btn-primary" href="{{ route('discount-restore', $discount->id) }}">
-                                <i class="bi bi-pencil-square"></i>
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                                <span> Restore</span>
                             </a>
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');">
-                                <i class="bi bi-backspace"></i>
+                                <i class="bi bi-trash3"></i>
+                                <span> Delete</span>
+                            </button>
+                            @else
+                            <button type="button" class="btn btn-warning">
+                                <i class="bi bi-info-circle"></i>
+                                <span> Restore Product</span>
+                            </button>
+                            @endif
+                            <!-- <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');">
+                                <i class="bi bi-trash3"></i>
+                                <span> Delete</span>
+                            </button> -->
                         </form>
                     </td>
                 </tr>

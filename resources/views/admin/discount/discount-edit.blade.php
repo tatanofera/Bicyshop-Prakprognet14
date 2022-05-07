@@ -52,7 +52,42 @@
                     </div>
                     @enderror
                 </div> -->
-                <div class="form-group mb-3">
+                <div class="row">
+                    <div class="col form-group mb-3">
+                        <label for="start" class="form-control-label">Discount Start</label>
+                        <input class="form-control @error('start') is-invalid @enderror" type="date" value="{{$discounts->start}}" id="start" name="start">
+                        @error('start')
+                        <div class="alert alert-danger invalid-feedback" role="alert">
+                            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+                            <strong>{{ $message }}</strong>
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col form-group mb-3">
+                        <label for="end" class="form-control-label">Discount End</label>
+                        <input class="form-control @error('end') is-invalid @enderror" type="date" value="{{$discounts->end}}" id="end" name="end">
+                        @error('end')
+                        <div class="alert alert-danger invalid-feedback" role="alert">
+                            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+                            <strong>{{ $message }}</strong>
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col form-group mb-3">
+                        <label for="percentage">Percentage</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control @error('percentage') is-invalid @enderror" aria-label="Amount (to the nearest dollar)" min="0" id="percentage" placeholder="Masukkan diskon produk" name="percentage" value="{{$discounts->percentage}}">
+                            <span class="input-group-text">%</span>
+                            @error('percentage')
+                            <div class="alert alert-danger invalid-feedback" role="alert">
+                                <!-- <span class="alert-icon"><i class="ni ni-like-2"></i></span> -->
+                                <strong>{{ $message }}</strong>
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="form-group mb-3">
                     <label for="start" class="form-control-label">Discount Start</label>
                     <input class="form-control @error('start') is-invalid @enderror" type="date" value="{{$discounts->start}}" id="start" name="start">
                     @error('start')
@@ -79,12 +114,11 @@
                         <span class="input-group-text">%</span>
                         @error('percentage')
                         <div class="alert alert-danger invalid-feedback" role="alert">
-                            <!-- <span class="alert-icon"><i class="ni ni-like-2"></i></span> -->
                             <strong>{{ $message }}</strong>
                         </div>
                         @enderror
                     </div>
-                </div>
+                </div> -->
                 <div class="text-center pt-3">
                     <button type="submit" class="btn btn-primary btn">Submit</button>
                 </div>

@@ -31,7 +31,7 @@
                     <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Price</th>
                     <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Stock</th>
                     <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Weight</th>
-                    <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                    <!-- <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th> -->
                     <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Action</th>
                 </tr>
             </thead>
@@ -52,25 +52,28 @@
                         <span class="text-dark text-xs">Rp.{{ $product->price }}</span>
                     </td>
                     <td>
-                        <p class="text-xs font-weight-bold mb-0">{{ $product->stock }} pcs</p>
+                        <span class="text-xs font-weight-bold mb-0">{{ $product->stock }} pcs</span>
                     </td>
                     <td>
                         <span class="text-xs font-weight-bold mb-0">{{ $product->weight }} kg</span>
                     </td>
-                    <td>
-                        <span class="text-dark text-xs">{{ $product->description }}</span>
-                    </td>
+                    <!-- <td>
+                        <p class="text-dark text-xs">{{ $product->description }}</p>
+                    </td> -->
                     <td class="align-middle">
                         <form action="{{ route('product-delete', $product->id)  }}" method="POST">
                             @csrf
                             <a type="button" class="btn btn-success" href="{{ route('product-detail', $product->id) }}">
-                                <i class="bi bi-box-arrow-right"></i>
+                                <i class="bi bi-box-arrow-in-down-right"></i>
+                                <span> Detail</span>
                             </a>
                             <a type="button" class="btn btn-primary" href="{{ route('product-edit', $product->id) }}">
                                 <i class="bi bi-pencil-square"></i>
+                                <span> Edit</span>
                             </a>
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');">
-                                <i class="bi bi-backspace"></i>
+                                <i class="bi bi-trash3"></i>
+                                <span> Delete</span>
                         </form>
                     </td>
                 </tr>

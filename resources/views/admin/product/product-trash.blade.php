@@ -66,10 +66,12 @@
                                 <i class="bi bi-box-arrow-right"></i>
                             </a> -->
                             <a type="button" class="btn btn-primary" href="{{ route('product-restore', $product->id) }}">
-                                <i class="bi bi-pencil-square"></i>
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                                <span> Restore</span>
                             </a>
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');">
-                                <i class="bi bi-backspace"></i>
+                                <i class="bi bi-trash3"></i>
+                                <span> Delete</span>
                         </form>
                     </td>
                 </tr>

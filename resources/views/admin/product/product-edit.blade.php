@@ -48,13 +48,14 @@
                     <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id" value="">
                         <option selected disabled>Pilih kategori</option>
                         @foreach($categories as $value)
-                        @if(!old('category_name'))
+                        <option value="{{ $value->id }}">{{ $value->category_name }}</option>
+                        <!-- @if(!old('category_name'))
                         <option class="" value="{{$value->id}}">{{$value->category_name}}</option>
                         @elseif(old('category_name') && old('category_name')==$value->id)
                         <option class="" value="{{old('category_name')}}" selected>{{$value->category_name}}</option>
                         @else
                         <option class="" value="{{$value->id}}">{{$value->category_name}}</option>
-                        @endif
+                        @endif -->
                         @endforeach
                     </select>
                     @error('category_id')
@@ -64,7 +65,49 @@
                     </div>
                     @enderror
                 </div>
-                <div class="form-group mb-3">
+                <div class="row">
+                    <div class="col form-group mb-3">
+                        <label for="price">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">Rp</span>
+                            <input type="number" class="form-control @error('price') is-invalid @enderror" aria-label="Amount (to the nearest dollar)" min="0" id="price" placeholder="Masukkan harga jual produk" name="price" value="{{$products->price}}">
+                            <span class="input-group-text">.00</span>
+                            @error('price')
+                            <div class="alert alert-danger invalid-feedback" role="alert">
+                                <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+                                <strong>{{ $message }}</strong>
+                            </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col form-group mb-3">
+                        <label for="stock" class="form-control-label">Stock</label>
+                        <div class="input-group">
+                            <input class="form-control @error('stock') is-invalid @enderror" type="number" min="0" id="stock" name="stock" value="{{$products->stock}}" placeholder="Masukkan stok produk">
+                            <span class="input-group-text">pcs</span>
+                        </div>
+                        @error('stock')
+                        <div class="alert alert-danger invalid-feedback" role="alert">
+                            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+                            <strong>{{ $message }}</strong>
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col form-group mb-3">
+                        <label for="weight" class="form-control-label">Weight</label>
+                        <div class="input-group">
+                            <input class="form-control @error('weight') is-invalid @enderror" type="number" min="0" id="weight" name="weight" value="{{$products->weight}}" placeholder="Masukkan berat produk">
+                            <span class="input-group-text">kg</span>
+                        </div>
+                        @error('weight')
+                        <div class="alert alert-danger invalid-feedback" role="alert">
+                            <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+                            <strong>{{ $message }}</strong>
+                        </div>
+                        @enderror
+                    </div>
+                </div>
+                <!-- <div class="form-group mb-3">
                     <label for="price">Price</label>
                     <div class="input-group">
                         <span class="input-group-text">Rp</span>
@@ -103,7 +146,7 @@
                         <strong>{{ $message }}</strong>
                     </div>
                     @enderror
-                </div>
+                </div> -->
                 <div class="form-group mb-3 mt-3">
                     <label for="description">Description</label>
                     <textarea type="text" class="form-control @error('description') is-invalid @enderror" placeholder="Masukkan deskripsi produk" id="description" name="description" rows="3">{{$products->description}}</textarea>
@@ -125,123 +168,132 @@
                         </div>
                         @enderror
                     </div>
-                    <br>
-                    <span>Product Image</span>
-                    <div class="table-responsive">
-                        <table class="table table-striped align-items-center mb-0">
-                            <thead>
-                                <tr class="text-center">
-                                    <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">No</th>
-                                    <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Image</th>
-                                    <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($product_images as $product_image)
-                                <form action="{{ route('product-image-delete', $product_image->id)  }}" method="POST">
-                                    @csrf
-                                    <div class="thumbnail">
-                                        <tr class="text-center">
-                                            <td>
-                                                <h6 class="mb-0 text-xs">{{ $loop->index+1}}</h6>
-                                            </td>
-                                            <td>
-                                                <img src="{{ asset('storage/'.$product_image->image_name) }}" alt="" style="width:100px; height:100px;">
-                                            </td>
-                                            <td>
-                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');">
-                                                    <i class="bi bi-backspace"></i>
-                                            </td>
-                                        </tr>
-                                    </div>
-                                </form>
-                                @empty
-                                <div class="col-6 align-items-center">
-                                    <h3 class="mb-0">Tidak Ada Foto</h3>
-                                </div>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
-                @if(empty($discount))
-                <div class="table-responsive">
-                    <table class="table table-striped align-items-center mb-0">
-                        <label class="" for="discount">Product Discount</label>
-                        <thead>
-                            <tr class="text-center">
-                                <th class="text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Start</th>
-                                <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">End</th>
-                                <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($discounts as $discount)
-                            <tr class="text-center">
-                                <td>
-                                    <div>
-                                        <div class="my-auto">
-                                            <h6 class="mb-0 text-xs">{{ $loop->index+1+($discounts->currentPage()-1)*5 }}</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-xs font-weight-bold mb-0">{{ $discount->start }}</span>
-                                </td>
-                                <td>
-                                    <span class="text-dark text-xs">{{ $discount->end }}</span>
-                                </td>
-                                <td>
-                                    <span class="text-dark text-xs">{{ $discount->percentage }}%</span>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                        {{ $discounts->links() }}
-                    </table>
-                </div>
-                @else
-                <div class="table-responsive">
-                    <table class="table table-striped align-items-center mb-0">
-                        <label class="" for="discount">Product Discount</label>
-                        <thead>
-                            <tr class="text-center">
-                                <th class="text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Start</th>
-                                <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">End</th>
-                                <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="text-center">
-                                <td>
-                                    <div>
-                                        <div class="my-auto">
-                                            <h6 class="mb-0 text-xs">-</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-xs font-weight-bold mb-0">-</span>
-                                </td>
-                                <td>
-                                    <span class="text-dark text-xs">-</span>
-                                </td>
-                                <td>
-                                    <span class="text-dark text-xs">-</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                @endif
-                <br><br>
                 <div class="text-center pt-3">
-                    <button type="submit" class="btn btn-primary btn">Submit</button>
+                    <button type="submit" name="action" value="submit" class="btn btn-primary btn">Submit</button>
                 </div>
             </div>
         </div>
     </form>
+    <div class="row mt-3">
+        <div class="p-5 pt-0">
+            <label>Product Image</label>
+            <div class="table-responsive">
+                <table class="table table-striped align-items-center mb-0">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">No</th>
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Image</th>
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($product_images as $product_image)
+                        <div class="thumbnail">
+                            <tr class="text-center">
+                                <td>
+                                    <h6 class="mb-0 text-xs">{{ $loop->index+1}}</h6>
+                                </td>
+                                <td>
+                                    <img src="{{ asset('storage/'.$product_image->image_name) }}" alt="" style="width:100px; height:100px;">
+                                </td>
+                                <td>
+                                    <form action="{{ route('product-image-delete', $product_image->id)  }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <button type="submit" name="action" value="delete-image" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');">
+                                            <i class="bi bi-trash3"></i>
+                                            <span> Delete</span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </div>
+                        @empty
+                        <div class="thumbnail">
+                            <tr class="text-center">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </div>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <!-- @if(empty($discount))
+            <div class="table-responsive">
+                <table class="table table-striped align-items-center mb-0">
+                    <label class="" for="discount">Product Discount</label>
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Start</th>
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">End</th>
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($discounts as $discount)
+                        <tr class="text-center">
+                            <td>
+                                <div>
+                                    <div class="my-auto">
+                                        <h6 class="mb-0 text-xs">{{ $loop->index+1+($discounts->currentPage()-1)*5 }}</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-xs font-weight-bold mb-0">{{ $discount->start }}</span>
+                            </td>
+                            <td>
+                                <span class="text-dark text-xs">{{ $discount->end }}</span>
+                            </td>
+                            <td>
+                                <span class="text-dark text-xs">{{ $discount->percentage }}%</span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    {{ $discounts->links() }}
+                </table>
+            </div>
+            @else
+            <div class="table-responsive">
+                <table class="table table-striped align-items-center mb-0">
+                    <label class="" for="discount">Product Discount</label>
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Start</th>
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">End</th>
+                            <th class="text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center">
+                            <td>
+                                <div>
+                                    <div class="my-auto">
+                                        <h6 class="mb-0 text-xs">-</h6>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-xs font-weight-bold mb-0">-</span>
+                            </td>
+                            <td>
+                                <span class="text-dark text-xs">-</span>
+                            </td>
+                            <td>
+                                <span class="text-dark text-xs">-</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @endif -->
+        </div>
+    </div>
 </div>
 @endsection
