@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Discount;
+use App\Models\Product;
+use App\Models\Product_category_details;
+use App\Models\Product_image;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -14,6 +18,8 @@ class LandingController extends Controller
     public function landingpage()
     {
         $data = array('title' => 'Home');
-        return view('homepage.landing', $data);
+        $products = Product::all();
+
+        return view('homepage.landing', $data, compact('products'));
     }
 }

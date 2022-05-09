@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,49 +21,50 @@
     <link rel="stylesheet" href="assets/css/lightbox.css">
     <title>{{ $title }}</title>
 
-  </head>
-  <body>
-    
+</head>
+
+<body>
+
     <!-- ** Header Area Start ** -->
-<header class="header-area header-sticky">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ** Logo Start ** -->
-                    <a href="{{ route('landing') }}" class="logo">
-                        <img src="assets/images/Logo.jpeg" style="width: 80px; heigh: 80px">
-                    </a>
-                    <!-- ** Logo End ** -->
-                    <!-- ** Menu Start ** -->
-                    <ul class="nav">
-                      <div class="col-20">
-                        <li class="submenu">  
-                            <a href="javascript:;">
-                            {{ Auth::user()->user_name }}
-                            </a>
-                            <ul>
-                                <li><a href="{{ route('userprofile') }}">Profile</a></li>
-                                <li><a href="{{ route('logout') }}"onclick="event.preventDefault();
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ** Logo Start ** -->
+                        <a href="{{ route('landing') }}" class="logo">
+                            <img src="assets/images/Logo.jpeg" style="width: 80px; heigh: 80px">
+                        </a>
+                        <!-- ** Logo End ** -->
+                        <!-- ** Menu Start ** -->
+                        <ul class="nav">
+                            <div class="col-20">
+                                <li class="submenu">
+                                    <a href="javascript:;">
+                                        {{ Auth::user()->user_name }}
+                                    </a>
+                                    <ul>
+                                        <li><a href="{{ route('userprofile') }}">Profile</a></li>
+                                        <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">Logout
-                                </a></li>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                  @csrf
-                                </form>
-                            </ul>
-                          </li>
-                      </div>        
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ** Menu End ** -->
-                </nav>
+                                            </a></li>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </ul>
+                                </li>
+                            </div>
+                            <a class='menu-trigger'>
+                                <span>Menu</span>
+                            </a>
+                            <!-- ** Menu End ** -->
+                    </nav>
+                </div>
             </div>
         </div>
-    </div>
-</header>
-<!-- ** Header Area End ** -->
-    
+    </header>
+    <!-- ** Header Area End ** -->
+
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col col-lg-4 col-md-4">
@@ -99,9 +100,10 @@
                             {{ Auth::user()->telepon }}
                         </p>
                     </div>
-                </div>      
+                </div>
             </div>
         </div>
     </div>
-  </body>
+</body>
+
 </html>

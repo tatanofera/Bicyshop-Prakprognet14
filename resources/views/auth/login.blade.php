@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  	<title>Login</title>
+
+<head>
+    <title>Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<link href="{{ asset('assets_login_register/https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap') }}" rel="stylesheet">
+    <link href="{{ asset('assets_login_register/https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap') }}" rel="stylesheet">
 
-	<link rel="stylesheet" href="{{ asset('assets_login_register/https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css') }}">
-	
-	<link rel="stylesheet" href="{{ asset('assets_login_register/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets_login_register/https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('assets_login_register/css/style.css') }}">
 
 </head>
 
@@ -17,18 +18,18 @@
     <section class="ftco-section">
         @if(count($errors) > 0)
         @foreach($errors->all() as $error)
-            <div class="alert alert-warning">{{ $error }}</div>
+        <div class="alert alert-warning">{{ $error }}</div>
         @endforeach
         @endif
         @if ($message = Session::get('error'))
-            <div class="alert alert-warning">
-                <p>{{ $message }}</p>
-            </div>
+        <div class="alert alert-warning">
+            <p>{{ $message }}</p>
+        </div>
         @endif
         @if ($message = Session::get('success'))
-            <div class="alert alert-success">
-                <p>{{ $message }}</p>
-            </div>
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
         @endif
         <div class="container">
             <div class="row justify-content-center">
@@ -56,9 +57,9 @@
                                     <p></p>
                                     <button type="submit" class="form-control btn btn-primary rounded submit px-3">Login</button>
                                     @if (Route::has('password.request'))
-                                            <a class="w-50 text-md-right" href="{{ route('password.request') }}">Forgot Password?</a>
+                                    <a class="w-50 text-md-right" href="{{ route('password.request') }}">Forgot Password?</a>
                                     @endif
-                                    <p>Don't have an account? <a class="text-primary w-50 text-md-right" href="{{ route('register') }}" >Register now</a></p>
+                                    <p>Don't have an account? <a class="text-primary w-50 text-md-right" href="{{ route('register') }}">Register now</a></p>
                                 </div>
                             </form>
                         </div>
@@ -68,4 +69,5 @@
         </div>
     </section>
 </body>
+
 </html
