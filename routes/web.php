@@ -14,7 +14,7 @@ Auth::routes(['verify' => true]); //verifikasi email
 
 Route::get('/', [App\Http\Controllers\LandingController::class, 'landingpage'])->name('home');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('landing')->middleware('verified');
-Route::get('/profile', [App\Http\Controllers\User\ProfileController::class, 'profile'])->name('userprofile');
+//Route::get('/profile', [App\Http\Controllers\User\ProfileController::class, 'profile'])->name('userprofile');
 
 Route::get('/admin', [App\Http\Controllers\Admin\LoginControllerAdmin::class, 'loginAdmin'])->name('loginadmin');
 Route::post('actionlogin', [App\Http\Controllers\Admin\LoginControllerAdmin::class, 'action'])->name('actionlogin');
