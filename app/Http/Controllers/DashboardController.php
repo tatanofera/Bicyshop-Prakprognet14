@@ -7,6 +7,8 @@ use App\Models\Courier;
 use App\Models\Product;
 use App\Models\Discount;
 use App\Models\Product_categories;
+use Illuminate\Support\Carbon;
+use App\Models\Transaction;
 
 class DashboardController extends Controller
 {
@@ -33,7 +35,24 @@ class DashboardController extends Controller
         if (!$daftar_kurir) {
             $daftar_kurir = 0;
         }
-        return view('admin.dashboard-new', compact('page', 'daftar_produk', 'daftar_kategori', 'daftar_diskon', 'daftar_kurir'))->with('dashboard_active', 'active');
+
+        $now = Carbon::now();
+        $transaksi_tahunan = Transaction::where('status', 'success')->whereYear('created_at', $now->year)->count();
+
+        return view('admin.dashboard-new', compact('page', 'daftar_produk', 'daftar_kategori', 'daftar_diskon', 'daftar_kurir', 'transaksi_tahunan'))->with('dashboard_active', 'active', 'transaction');
+
+        // $data_transaction = \DB::select('SELECT MONTH(updated_at) AS bulan,COUNT(updated_at) AS jumlah FROM `transactions` WHERE `status` = "Sampai di tujuan" AND YEAR(updated_at)="2022" GROUP BY YEAR(updated_at), MONTH(updated_at)');
+        // $transaction = json_encode($data_transaction);
+
+        // return view('admin.dashboard-new', compact('page', 'daftar_produk', 'daftar_kategori', 'daftar_diskon', 'daftar_kurir'))->with('dashboard_active', 'active', 'transaction');
         // return view('admin.dashboard-new', $data, compact('page'))->with('dashboard_active', 'active');
+    }
+
+    public function getTransaksi()
+    {
+        $data_transaction = \DB::select('SELECT MONTH(updated_at) AS bulan,COUNT(updated_at) AS jumlah FROM `transactions` WHERE `status` = "success" AND YEAR(updated_at)="2022" GROUP BY YEAR(updated_at), MONTH(updated_at)');
+        $transaction = json_encode($data_transaction);
+
+        return $transaction;
     }
 }

@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Product_categories;
 use App\Models\Product_category_details;
 use App\Models\Product_image;
+use App\Models\Product_review;
 use Illuminate\Pagination\Paginator;
 
 
@@ -153,6 +154,11 @@ class ProductController extends Controller
         $products = Product::find($id);
         $product_images = Product_image::where('product_id', '=', $products->id)->get();
         $count_product_images = $product_images->count();
+        $products_review = Product_review::all();
+        // $avgRate = Product_review::select('rate')->where('product_id', '=', $id)->get();
+        // $avgRate = Product_review::avg('rate', '=', $products->$id)
+        $avgRate = Product_review::where('product_id', '=', $id)->avg('rate');
+        // $avgRate = avg('rate');
         $det_categories = Product_category_details::where('product_id', '=', $products->id)->first();
         $categories = Product_categories::all();
 
@@ -161,11 +167,11 @@ class ProductController extends Controller
         Paginator::useBootstrap();
 
         if ($discount == null) {
-            return view('admin.product.product-detail', compact('products', 'product_images', 'count_product_images', 'det_categories', 'categories', 'discount', 'page'))->with('discount', 'active')->with('product_active', 'active');
+            return view('admin.product.product-detail', compact('products', 'product_images', 'count_product_images', 'det_categories', 'categories', 'discount', 'page', 'avgRate'))->with('discount', 'active')->with('product_active', 'active');
             // return view('admin.product.product-edit', compact('products', 'product_images', 'categories', 'det_categories', 'discount'))->with('discount', 'active');
         } else {
             $discounts = Discount::where('product_id', '=', $products->id)->paginate(5);
-            return view('admin.product.product-detail', compact('products', 'product_images', 'count_product_images', 'det_categories', 'categories', 'discounts', 'page'))->with('product_active', 'active');
+            return view('admin.product.product-detail', compact('products', 'product_images', 'count_product_images', 'det_categories', 'categories', 'discounts', 'page', 'avgRate'))->with('product_active', 'active');
             // return view('admin.product.product-edit', compact('products', 'product_images', 'categories', 'det_categories', 'discounts'));
         }
     }

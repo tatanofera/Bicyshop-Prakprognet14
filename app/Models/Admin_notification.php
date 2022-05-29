@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Admin_notification extends Model
 {
     use HasFactory;
-    protected $fillable = ["type", "notifiable_id", "data", "read_at"];
+
+    protected $table = 'admin_notifications';
+    protected $guarded = [];
+    
+    // protected $fillable = ["type", "notifiable_id", "data", "read_at"];
 
     public function admin()
     {

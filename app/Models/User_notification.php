@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class User_notification extends Model
 {
     use HasFactory;
+    
+    protected $table = 'user_notifications';
+    protected $guarded = [];
     protected $fillable = ["type", "notifiable_type", "notifiable_id", "data", "read_at"];
 
     public function user()

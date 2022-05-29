@@ -39,6 +39,21 @@ class Admin extends Authenticatable
         return $this->hasMany(Admin_notification::class, "notifiable_id");
     }
 
+    public function notifications()
+    {
+        return $this->morphMany(Admin_notification::class, 'notifiable')->orderby('created_at', 'desc');
+    }
+
+    public function createNotif($data)
+    {
+        $notif = new Admin_notification();
+        $notif->type = 'App\Notifications\AdminNotification';
+        $notif->notifiable_type = 'App\User';
+        $notif->notifiable_id = $this->id;
+        $notif->data = $data;
+        $notif->save();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

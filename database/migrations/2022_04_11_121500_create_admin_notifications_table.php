@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('admin_notifications', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('type', 255);
-            $table->bigInteger('notifiable_id')->unsigned();
+            $table->bigInteger('notifiable_type')->unsigned();
             $table->foreign('notifiable_id')->references('id')->on('admins')->onUpdate('cascade')->onDelete('cascade');
             $table->text('data');
             $table->timestamp('read_at')->nullable();
